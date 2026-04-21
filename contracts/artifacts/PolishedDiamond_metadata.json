@@ -1,0 +1,46 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"details": "This contract represents the final stage of the diamond lifecycle. It links polished diamonds to their original rough diamond and manages ownership and transfer of assets. This contract ensures: - Only certified rough diamonds can be used - Ownership is tracked immutably - Full traceability is maintained",
+			"kind": "dev",
+			"methods": {},
+			"title": "PolishedDiamond",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"PolishedDiamond.sol": "PolishedDiamond"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"PolishedDiamond.sol": {
+			"keccak256": "0xfccc435f43d19047c56e591b5c004cf90cd87e76062ccac095336738835bcf9c",
+			"urls": [
+				"bzz-raw://3474fc5d1f0303456a7784716e2273b1da9ad823d3ea31b2675557628cd36876",
+				"dweb:/ipfs/QmaerxbtQA2GS5gs72eH8XqdD4q3GTg5GD37579ZpytuRP"
+			]
+		}
+	},
+	"version": 1
+}

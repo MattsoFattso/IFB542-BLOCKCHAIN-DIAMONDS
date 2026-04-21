@@ -1,0 +1,46 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"details": "This contract manages the lifecycle of rough diamonds from initial mining to certification. It ensures that: - Only authorised miners can mint diamonds - Only certifiers can validate conflict-free status - All data is immutably recorded on-chain",
+			"kind": "dev",
+			"methods": {},
+			"title": "RoughDiamond",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"RoughDiamond.sol": "RoughDiamond"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"RoughDiamond.sol": {
+			"keccak256": "0x56430275902edcdfd0052e67c9100762748ea838cc154e14d18e55b6bc4730fe",
+			"urls": [
+				"bzz-raw://7fac03ef372844c24fef7ee6565ceb71f77b7cda0b94d33f689572316ff68ed9",
+				"dweb:/ipfs/QmUqezt4kUk7vG8kXDU33EaFWkTYG95BNoGMgQUKJ6vqLh"
+			]
+		}
+	},
+	"version": 1
+}

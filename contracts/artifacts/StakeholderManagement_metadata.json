@@ -1,0 +1,47 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"details": "This contract manages all stakeholders within the GemVault system. It enforces role-based access control (RBAC) to ensure that only authorised participants (miners, certifiers, graders) can perform specific transactions. This contract acts as the central authority for validating permissions across other smart contracts in the system.",
+			"kind": "dev",
+			"methods": {},
+			"title": "StakeholderManagement",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"StakeholderManagement.sol": "StakeholderManagement"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"StakeholderManagement.sol": {
+			"keccak256": "0x37b98e6e82816b6fe7563d6c47c7985471d51366b34e4065e6cb7cda287dbbc7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://32c3a61e5c9c2ef1947f1e2956f60129e8513c9b75cd3238283f04ffcd2866a0",
+				"dweb:/ipfs/QmUS6KVnqxmBJTCUTjVSrW4GsWfRsm6iSeaPmXe4kkbXfg"
+			]
+		}
+	},
+	"version": 1
+}
