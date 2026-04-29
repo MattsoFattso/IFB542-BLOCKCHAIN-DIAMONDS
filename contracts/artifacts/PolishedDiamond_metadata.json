@@ -20,7 +20,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"PolishedDiamond.sol": "PolishedDiamond"
+			"Diamond.sol": "PolishedDiamond"
 		},
 		"evmVersion": "prague",
 		"libraries": {},
@@ -34,11 +34,11 @@
 		"remappings": []
 	},
 	"sources": {
-		"PolishedDiamond.sol": {
-			"keccak256": "0xfccc435f43d19047c56e591b5c004cf90cd87e76062ccac095336738835bcf9c",
+		"Diamond.sol": {
+			"keccak256": "0x63d502942d6dd297df5183e5b3b5fd0e7ae3bc1d1d289f8f4a105d5881e54e60",
 			"urls": [
-				"bzz-raw://3474fc5d1f0303456a7784716e2273b1da9ad823d3ea31b2675557628cd36876",
-				"dweb:/ipfs/QmaerxbtQA2GS5gs72eH8XqdD4q3GTg5GD37579ZpytuRP"
+				"bzz-raw://34245fdc7abe24cf6112c347986d91e2ba242aba7043386e216f4a2e8fdd081c",
+				"dweb:/ipfs/QmasyQUd8rTHEkzNkXUjDgi7yDw88CRtRWaTyYnysp8w6g"
 			]
 		}
 	},
