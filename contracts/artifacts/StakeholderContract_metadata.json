@@ -69,25 +69,6 @@
 						"type": "address"
 					}
 				],
-				"name": "isConsumer",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_addr",
-						"type": "address"
-					}
-				],
 				"name": "isGrader",
 				"outputs": [
 					{
@@ -223,11 +204,11 @@
 	},
 	"sources": {
 		"StakeholderManagement.sol": {
-			"keccak256": "0xa57005b0f0ee6a02f85ddf66f66daf45ba53886abcbf31fd4d1b660cd08bf3bf",
+			"keccak256": "0x6f30a61305cc6859483d800e40c88a9893af53ab42e41d6826e79f362a1cde90",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://319ddad9ccb6acf1c9ce47ab671dafee82af7d9a31fe630cc4ba67999500cfe6",
-				"dweb:/ipfs/QmVzinFEUM2X4Y6Z9WRQcKPgorJSL3ayfhZyoUZsN9gyXK"
+				"bzz-raw://99ea0deb1129fd6162979f9d9226be9d61e596da1f4153dc485300aa58885d6e",
+				"dweb:/ipfs/QmXqtPwzdQQJodX2WUVgTF5mYRq2dzZAqt3vgoBUCM6GSy"
 			]
 		}
 	},

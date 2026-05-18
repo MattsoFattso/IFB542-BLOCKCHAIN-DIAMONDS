@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.18;
 
 /**
  * @title StakeholderManagement
@@ -15,11 +15,10 @@ pragma solidity ^0.8.0;
 contract StakeholderContract {
 
     enum Role {
-        None,
-        Miner,
-        ConsumerRetailer,
-        KimberleyCertifier,
-        GraderPolisher
+        None, // 0
+        Miner, // 1
+        KimberleyCertifier, // 2
+        GraderPolisher // 3
     }
 
     struct Stakeholder {
@@ -60,10 +59,6 @@ contract StakeholderContract {
 
     function isMiner(address _addr) public view returns (bool) {
         return stakeholders[_addr].role == Role.Miner;
-    }
-
-    function isConsumer(address _addr) public view returns (bool) {
-        return stakeholders[_addr].role == Role.ConsumerRetailer;
     }
 
     function isCertifier(address _addr) public view returns (bool) {
