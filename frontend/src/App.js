@@ -3,6 +3,7 @@ import StartupPage from "./pages/StartupPage";
 import StakeholderConfigPage from "./pages/StakeholderConfigPage";
 import MintPage from "./pages/MintPage";
 import DiamondMainPage from "./pages/DiamondMainPage";
+import PolishingPage from "./pages/PolishingPage";
 import MarketPage from "./pages/MarketPage";
 import "./App.css";
 

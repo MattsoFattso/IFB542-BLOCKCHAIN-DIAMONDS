@@ -5,7 +5,7 @@ export default function StartupPage({ onGoConfig, onGoMint}) {
             <p>Diamond Supply Chain</p>
 
             <button onClick={onGoConfig}>Stakeholder Configuration</button>
-            <button onClick={onGoMint}>Mint a Diamond</button>
+            <button onClick={onGoMint}>Assess Collection</button>
         </div>
     );
     }
