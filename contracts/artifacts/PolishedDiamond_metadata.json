@@ -4,12 +4,126 @@
 	},
 	"language": "Solidity",
 	"output": {
-		"abi": [],
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_stakeholderAddress",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "diamondIds",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "diamonds",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "parentId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "origin",
+						"type": "string"
+					},
+					{
+						"internalType": "enum PolishedDiamond.DiamondState",
+						"name": "state",
+						"type": "uint8"
+					},
+					{
+						"internalType": "address",
+						"name": "certifier",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "grader",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "gradingReport",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "_origin",
+						"type": "string"
+					}
+				],
+				"name": "mintRoughDiamond",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "stakeholderContract",
+				"outputs": [
+					{
+						"internalType": "contract IStakeholder",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
 		"devdoc": {
-			"details": "This contract represents the final stage of the diamond lifecycle. It links polished diamonds to their original rough diamond and manages ownership and transfer of assets. This contract ensures: - Only certified rough diamonds can be used - Ownership is tracked immutably - Full traceability is maintained",
 			"kind": "dev",
 			"methods": {},
-			"title": "PolishedDiamond",
 			"version": 1
 		},
 		"userdoc": {
@@ -20,7 +134,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"PolishedDiamond.sol": "PolishedDiamond"
+			"Diamond.sol": "PolishedDiamond"
 		},
 		"evmVersion": "prague",
 		"libraries": {},
@@ -34,11 +148,11 @@
 		"remappings": []
 	},
 	"sources": {
-		"PolishedDiamond.sol": {
-			"keccak256": "0xfccc435f43d19047c56e591b5c004cf90cd87e76062ccac095336738835bcf9c",
+		"Diamond.sol": {
+			"keccak256": "0xca61dc350dd7f624586844a2105ddba45c8d930487a56cbdc1e95184659cc10d",
 			"urls": [
-				"bzz-raw://3474fc5d1f0303456a7784716e2273b1da9ad823d3ea31b2675557628cd36876",
-				"dweb:/ipfs/QmaerxbtQA2GS5gs72eH8XqdD4q3GTg5GD37579ZpytuRP"
+				"bzz-raw://2347459ddbb799f6a45e00a9a477859a87f7841c052c3567b8e838132bbc0f33",
+				"dweb:/ipfs/QmchtXzrUF8goetJbqSdTTVnSwqbrxXPm7cie4iUgJiya5"
 			]
 		}
 	},

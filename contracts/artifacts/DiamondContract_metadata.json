@@ -1,0 +1,554 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_stakeholderContractAddress",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "requestId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "roughDiamondId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "polisher",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256[]",
+						"name": "polishedDiamondIds",
+						"type": "uint256[]"
+					}
+				],
+				"name": "PolishedDiamondsCreated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "requestId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "roughDiamondId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "requester",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "requestNote",
+						"type": "string"
+					}
+				],
+				"name": "PolishingRequested",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "diamondId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "KimberleyAuthority",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "CertificateHash",
+						"type": "string"
+					}
+				],
+				"name": "RoughDiamondCertified",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "diamondId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "miner",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "origin",
+						"type": "string"
+					}
+				],
+				"name": "RoughDiamondMinted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "diamondId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "kimberleyAuthority",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "rejectionReason",
+						"type": "string"
+					}
+				],
+				"name": "RoughDiamondRejected",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_diamondId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "_certificateHash",
+						"type": "string"
+					}
+				],
+				"name": "certifyRoughDiamond",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "diamondIds",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "diamonds",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "parentId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "origin",
+						"type": "string"
+					},
+					{
+						"internalType": "enum DiamondContract.DiamondState",
+						"name": "state",
+						"type": "uint8"
+					},
+					{
+						"components": [
+							{
+								"internalType": "bool",
+								"name": "isCertified",
+								"type": "bool"
+							},
+							{
+								"internalType": "address",
+								"name": "certifier",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "certificateHash",
+								"type": "string"
+							}
+						],
+						"internalType": "struct DiamondContract.CertificationData",
+						"name": "certification",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "bool",
+								"name": "isGraded",
+								"type": "bool"
+							},
+							{
+								"internalType": "address",
+								"name": "grader",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "gradingReportHash",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "colour",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "clarity",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "cut",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "carat",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct DiamondContract.GradingData",
+						"name": "grading",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getPendingPolishingRequests",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getUncertifiedRoughDiamonds",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_requestId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "_polishedDiamondIds",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "string[]",
+						"name": "_gradingReportHashes",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string[]",
+						"name": "_colours",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string[]",
+						"name": "_clarities",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string[]",
+						"name": "_cuts",
+						"type": "string[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "_caratWeights",
+						"type": "uint256[]"
+					}
+				],
+				"name": "mintPolishedDiamond",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "_origin",
+						"type": "string"
+					}
+				],
+				"name": "mintRoughDiamond",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "nextPolishingRequestId",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "polishingRequestIds",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "polishingRequests",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "requestId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "roughDiamondId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "requester",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "polisher",
+						"type": "address"
+					},
+					{
+						"internalType": "enum DiamondContract.PolishingRequestStatus",
+						"name": "status",
+						"type": "uint8"
+					},
+					{
+						"internalType": "string",
+						"name": "requestNote",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_diamondId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "_reason",
+						"type": "string"
+					}
+				],
+				"name": "rejectRoughDiamond",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_roughDiamondId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "_requestNote",
+						"type": "string"
+					}
+				],
+				"name": "requestPolishing",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "stakeholderContract",
+				"outputs": [
+					{
+						"internalType": "contract StakeholderContract",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"Diamond.sol": "DiamondContract"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"Diamond.sol": {
+			"keccak256": "0xb2cb24a52684cb939e04248c7588a76495690d24f6ce943255a902ce9b8ba5ba",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b4d08b553ac4efbf2c06c57435cf2a8328e9b41f0fa2f4b71f2a8fc9aba2fadf",
+				"dweb:/ipfs/QmPT1HzcG4RpterAF95zZG93wGA1S42ZanNDhVDzvnhe1b"
+			]
+		},
+		"StakeholderManagement.sol": {
+			"keccak256": "0x6f30a61305cc6859483d800e40c88a9893af53ab42e41d6826e79f362a1cde90",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://99ea0deb1129fd6162979f9d9226be9d61e596da1f4153dc485300aa58885d6e",
+				"dweb:/ipfs/QmXqtPwzdQQJodX2WUVgTF5mYRq2dzZAqt3vgoBUCM6GSy"
+			]
+		}
+	},
+	"version": 1
+}
