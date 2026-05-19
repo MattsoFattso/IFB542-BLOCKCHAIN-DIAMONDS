@@ -1,8 +1,30 @@
 import { useState } from "react";
+import { ethers } from "ethers";
+import config from "../config"
+import DiamondABI from "../abi/DiamondContract.json";
 
-export default function MainPage({ onNext, onBack}) {
+export default function MintPage({ onNext, onBack}) {
     const [country, setCountry] = useState("");
     const [diamondHash, setDiamondHash] = useState("");
+    const [status, setStatus] = useState("");
+
+    async function handleMint() {
+        if (!country) { alert("Please enter a country"); return; }
+        if (!diamondHash) { alert("Please enter a diamond hash"); return; }
+        try {
+            setStatus("Waiting for MetaMask...");
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner();
+            const contract = new ethers.Contract(config.diamondAddress, DiamondABI, signer);
+            const tx = await contract.mintRoughDiamond(country, diamondHash);
+            setStatus("Minting on blockchain...");
+            await tx.wait();
+            setStatus("Diamond minted successfully.");
+        } catch (e) {
+            setStatus("Error: " + e.message);
+        }
+
+    }
 
     function handleNext() {
         if (!country) { alert("Please enter a country"); return; }
@@ -14,6 +36,8 @@ export default function MainPage({ onNext, onBack}) {
         <div className="page">
             <h1>Mint a Rough Diamond</h1>
             <p>Record a new diamond on the blockchain.</p>
+
+            {status && <p>{status}</p>}
 
             <div>
                 <label>Country of Origin</label>
@@ -30,7 +54,7 @@ export default function MainPage({ onNext, onBack}) {
             </div>
 
             {/* insert RoughDiamond() logic*/}
-            <button onClick={() =>alert("TO DO: connect mintRoughDiamond()")}>Mint Diamond</button>
+            <button onClick={handleMint}>Mint Diamond</button>
             <button onClick={handleNext}>Next: Request Certificate </button>
             <button onClick={onBack}>Back</button>
         </div>
