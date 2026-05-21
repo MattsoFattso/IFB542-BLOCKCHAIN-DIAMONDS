@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import StartupPage from "./pages/StartupPage";
-import StakeholderConfigPage from "./pages/StakeholderConfigPage";
 import MintPage from "./pages/MintPage";
 import DiamondMainPage from "./pages/DiamondMainPage";
 import PolishingPage from "./pages/PolishingPage";
@@ -11,7 +10,6 @@ import StakeholderABI from "./abi/StakeholderContract.json"
 import "./App.css";
 
 const ROLE_NAMES = {
-    0: "None",
     1: "Miner",
     2: "Kimberley Certifier",
     3: "Grader/Polisher",
@@ -38,9 +36,9 @@ export default function App() {
             const roleNum = Number(userRole);
             setRole(roleNum);
 
-            if (roleNum === 1) setPage("miner");
-            if (roleNum === 2) setPage("certifier");
-            if (roleNum === 3) setPage("grader");
+            if (roleNum === 1) setPage("startup");
+            if (roleNum === 2) setPage("startup");
+            if (roleNum === 3) setPage("startup");
 
 
             } catch (e) {
@@ -65,28 +63,44 @@ export default function App() {
 
     function renderPage() {
 
+        if (role === null || page === "startup") {
+            return (
+                <StartupPage
+                    role={role}
+                    onSelectRole={(p) =>{
+                        if (role === 1 && p === "miner") setPage("miner");
+                        else if (role === 2 && p === "certifier") setPage("certifier");
+                        else if (role === 3 && p === "grader") setPage("polisher");
+                        else alert ("You are not authorised to access this page.");
+                    }}
+                />
+            );
+        }
+
         if (role === 1) {
-        // miner can only access mint and diamond pages
+            // miner can only access miner page
             switch (page) {
-                case "mint": return <MintPage onNext={() => setPage ("diamond")} onBack{() => setPage("mint")} />;
-                case "diamond": return <DiamondMainPage onNext={() => setPage("diamond")} onBack={() => setPage("mint")} />;
-                default: return <MintPage> onNext{() => setPage("diamond")} onBack={() => setPage("mint")} />;
+                case "miner": return <MintPage onNext={() => setPage ("startup")} onBack={() => setPage("startup")} />;
+                default: return unauthorised();
             }
+        }
 
         if (role === 2) {
-            // Kimberley Certifier can only access diamond page
-            return <DiamondMainPage onNext{() => setPage("diamond")} onBack={() => setPage("diamond")} />;
+            switch (page) {
+                // Kimberley Certifier can only access diamond page
+                case "certifier": return <DiamondMainPage onNext={() => setPage("startup")} onBack={() => setPage("startup")} />;
+                default: return unauthorised();
+            }
         }
 
         if (role === 3)
-            // Grader/Polisher can only access polishing and market page
-            case "polishing": return <PolishingPage onNext={() => setPage("market")} onBack={() => setPage("polishing")} />;
-            case "market": return<MarketPage onBack={() => setPage("polishing")} />;
-            default: return <PolishingPage onNext={() => setPage("market")} onBack={() => setPage("polishing")} />;
+            switch (page) {
+                // Grader/Polisher can only access polishing and market page
+                case "polishing": return <PolishingPage onNext={() => setPage("market")} onBack={() => setPage("startup")} />;
+                case "market": return<MarketPage onBack={() => setPage("startup")} />;
+                default: return unauthorised();
+            }
         }
-
-        return unauthorised();
-    }
     return (
         <div className = "app">
             <header className="app-header">
