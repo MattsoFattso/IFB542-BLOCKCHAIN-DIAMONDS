@@ -3,26 +3,7 @@ import { ethers } from "ethers";
 import config from "../config";
 import DiamondABI from "../abi/DiamondContract.json";
 
-export default function DiamondMainPage ({ onNext, onBack }) {
 
-    const [diamonds, setDiamonds] = useState([]);
-    const [selectedId, setSelectedId] = useState("");
-    const [status, setStatus] = useState("");
-
-    // Load uncertified diamonds on page load
-    useEffect(() => {
-        async function loadDiamonds() {
-            try {
-                const provider = new ethers.BrowserProvider(window.ethereum);
-                const contract = new ethers.Contract(config.diamondAddress, DiamondABI, provider);
-                const ids = await contract.getUncertifiedRoughDiamonds();
-                setDiamonds(ids.map(id => id.toString()));
-            } catch (e) {
-                setStatus("Error loading diamonds: " + e.message);
-            }
-        }
-        loadDiamonds();
-    }, []);
 
 async function handleApprove() {
     if (!selectedId) {alert ("Please select a diamond first"); return; }
