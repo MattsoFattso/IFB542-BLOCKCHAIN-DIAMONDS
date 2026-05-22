@@ -3,6 +3,12 @@ import { ethers } from "ethers";
 import config from "../config"
 import DiamondABI from "../abi/DiamondContract.json";
 
+const DIAMOND_STATES = {
+    1: "Rough",
+    2: "Certified",
+    3: "Polished"
+};
+
 export default function MintPage({ onNext, onBack}) {
     const [country, setCountry] = useState("");
     const [diamondHash, setDiamondHash] = useState("");
@@ -10,42 +16,67 @@ export default function MintPage({ onNext, onBack}) {
     const [selectedId, setSelectedId] = useState("");
     const [requestNote, setRequestNote] = useState("");
     const [status, setStatus] = useState("");
+    const [myDiamonds, setMyDiamonds] = useState([]);
 
 
-    // Load certified diamonds on page
+    // Load diamonds on page
     useEffect(() => {
-        loadCertifiedDiamonds();
+        loadMyDiamonds();
     }, []);
 
-    async function loadCertifiedDiamonds() {
+    async function getSignerContract() {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        return new ethers.Contract(config.diamondAddress, DiamondABI, signer)
+    }
+
+    async function loadMyDiamonds() {
         try {
             const provider = new ethers.BrowserProvider(window.ethereum);
             const signer = await provider.getSigner();
             const contract = new ethers.Contract(config.diamondAddress, DiamondABI, signer);
             const ids = await contract.getMyDiamonds();
-            setCertifiedDiamonds(ids.map(id => id.toString()));
+
+            // Fetch details of each diamond
+            const details = await Promise.all (
+                ids.map(async(id) => {
+                    const d = await contract.diamonds(id);
+                    return {
+                        id: d.id.toString(),
+                        origin: d.origin,
+                        hash: d.RoughDocumentHash,
+                        state: DIAMOND_STATES[Number(d.state)] ?? "Unknown",
+                        stateNum: Number(d.state),
+                    };
+                })
+            );
+
+            setMyDiamonds(details);
+
+            // only certified diamonds can request polishing
+            const certified = details.filter(d => d.stateNum === 1);
+            setCertifiedDiamonds(certified.map(d => d.id));
         } catch (e) {
-            setStatus ("Error loading diamonds: " + e.message);
+            setStatus("Error loading diamonds: " + e.message);
         }
     }
 
-    // Mint rough diamond
     async function handleMint() {
         if (!country) { alert("Please enter a country"); return; }
-        if (!diamondHash) { alert("Please enter a diamond hash"); return; }
+        if (!diamondHash) { alert("Please enter a diamond here"); return; }
         try {
             setStatus("Waiting for MetaMask...");
-            const provider = new ethers.BrowserProvider(window.ethereum);
-            const signer = await provider.getSigner();
-            const contract = new ethers.Contract(config.diamondAddress, DiamondABI, signer);
+            const contract = await getSignerContract();
             const tx = await contract.mintRoughDiamond(country, diamondHash);
             setStatus("Minting on blockchain...");
             await tx.wait();
-            setStatus("Diamond minted successfully.");
+            setStatus("Diamond minted successfully!");
+            setCountry("");
+            setDiamondHash("");
+            loadMyDiamonds();
         } catch (e) {
             setStatus("Error: " + e.message);
         }
-
     }
 
     async function handleRequestPolish() {
@@ -72,6 +103,36 @@ export default function MintPage({ onNext, onBack}) {
 
             {status && <p>{status}</p>}
 
+            {/* Diamonds Table */}
+            <h2>Owned Diamonds - Rough and Polished</h2>
+            <button onClick={loadMyDiamonds}>Refresh</button>
+            {myDiamonds.length === 0 ? (
+                <p>No diamonds found.</p>
+            ) : (
+                <table border ="1" cellPadding="8" style={{ width: "100%", borderCollapse: "collapse"}}>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Origin</th>
+                            <th>Document</th>
+                            <th>State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {myDiamonds.map(d => (
+                            <tr key ={d.id}>
+                                <td>#{d.origin}</td>
+                                <td>#{d.hash}</td>
+                                <td>#{d.state}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
+
+            <hr />
+
+            {/* Mining a Rough Diamond */}
             <h2>Mine a Rough Diamond</h2>
             <div>
                 <label>Country of Origin</label>

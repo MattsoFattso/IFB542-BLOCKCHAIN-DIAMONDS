@@ -4,7 +4,7 @@ change name from Mint Page to Miner Page: done
 
 In Miner Page: Remove Request Certification: done
 
-Add a table below of all the diamonds that the miner owns (polished and rough).
+Add a table below of all the diamonds that the miner owns (polished and rough). done
 
 Allow to select a rough stone, then submit a polishing request: done
 
@@ -13,7 +13,7 @@ Allow to select a rough stone, then submit a polishing request: done
         string memory _requestNote DONE
 
 
-That page will then be done:
+That page will then be done: PAGE DONE !!
 
 
 
