@@ -1,0 +1,53 @@
+Things to Add to UI:
+
+change name from Mint Page to Miner Page:
+
+In Miner Page: Remove Request Certification:
+
+Add a table below of all the diamonds that the miner owns (polished and rough).
+
+Allow to select a rough stone, then submit a polishing request:
+
+ function requestPolishing(
+        uint _roughDiamondId,
+        string memory _requestNote
+
+
+That page will then be done:
+
+
+
+Polisher Page:
+
+Basically what should pop up is all the polish requests (polish request View)
+
+   function getPendingPolishingRequests()
+        external
+        view
+        onlyGraderPolisher
+        returns (uint[] memory)
+
+
+
+This will give a drop down list of polishing requests.
+
+When clicking one:
+
+Have a large column of inputs that match this:
+
+ function mintPolishedDiamond(
+        uint _requestId,
+        uint[] memory _polishedDiamondIds,
+        string[] memory _gradingReportHashes,
+        string[] memory _colours,
+        string[] memory _clarities,
+        string[] memory _cuts,
+        uint256[] memory _caratWeights
+
+If there are 2 diamonds being minted from a rough diamond: the array should be of length two and there should be two input boxes:
+
+Make it all input boxes for each of these data inputs except for request ID. 
+
+After this is minted, nothing will change on this page (except maybe a affirmative text "diamonds have been minted)
+
+Once the miner signs back into his account, it should update the new collection and show the new diamonds that were made.
