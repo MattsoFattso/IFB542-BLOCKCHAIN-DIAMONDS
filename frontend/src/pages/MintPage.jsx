@@ -112,8 +112,8 @@ export default function MintPage({ onNext, onBack}) {
                 <table border ="1" cellPadding="8" style={{ width: "100%", borderCollapse: "collapse"}}>
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Origin</th>
+                            <th>ID</th>
                             <th>Document</th>
                             <th>State</th>
                         </tr>
