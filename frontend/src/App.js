@@ -4,7 +4,6 @@ import StartupPage from "./pages/StartupPage";
 import MintPage from "./pages/MintPage";
 import DiamondMainPage from "./pages/DiamondMainPage";
 import PolishingPage from "./pages/PolishingPage";
-import MarketPage from "./pages/MarketPage";
 import config from "./config";
 import StakeholderABI from "./abi/StakeholderContract.json"
 import "./App.css";
@@ -76,7 +75,7 @@ export default function App() {
                 />
             );
         }
-
+        console.log(role);
         if (role === 1) {
             // miner can only access miner page
             switch (page) {
@@ -96,8 +95,7 @@ export default function App() {
         if (role === 3)
             switch (page) {
                 // Grader/Polisher can only access polishing and market page
-                case "polishing": return <PolishingPage onNext={() => setPage("market")} onBack={() => setPage("startup")} />;
-                case "market": return<MarketPage onBack={() => setPage("startup")} />;
+                case "polisher": return <PolishingPage onNext={() => setPage("market")} onBack={() => setPage("startup")} />;
                 default: return unauthorised();
             }
         }
