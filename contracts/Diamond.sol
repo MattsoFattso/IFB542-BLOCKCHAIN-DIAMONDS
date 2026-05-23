@@ -20,6 +20,7 @@ contract DiamondContract {
     constructor(address _stakeholderContractAddress) {
         stakeholderContract = StakeholderContract(_stakeholderContractAddress);
     }
+
     modifier onlyMiner() {
         require(
             stakeholderContract.isMiner(msg.sender),
@@ -108,9 +109,9 @@ contract DiamondContract {
 
         uint newDiamondId = nextDiamondId;
 
-        require(newDiamondId != 0, "Diamond ID cannot be zero");
         require(diamonds[newDiamondId].id == 0, "Diamond already exists");
         require(bytes(_origin).length > 0, "Origin cannot be empty");
+        require(bytes(_documenthash).length > 0, "Document hash cannot be empty");
 
         diamonds[newDiamondId] = Diamond({
             id: newDiamondId,
@@ -140,6 +141,32 @@ contract DiamondContract {
         emit RoughDiamondMinted(newDiamondId, msg.sender, _origin); // Emit event for UI
     }
 
+    function getMyDiamonds() external view onlyMiner returns (uint[] memory) {
+    uint count = 0;
+
+    for (uint i = 0; i < diamondIds.length; i++) {
+        uint diamondId = diamondIds[i];
+
+        if (diamonds[diamondId].owner == msg.sender) {
+            count++;
+        }
+    }
+
+    uint[] memory myDiamondIds = new uint[](count);
+    uint index = 0;
+
+    for (uint i = 0; i < diamondIds.length; i++) {
+        uint diamondId = diamondIds[i];
+
+        if (diamonds[diamondId].owner == msg.sender) {
+            myDiamondIds[index] = diamondId;
+            index++;
+        }
+    }
+
+    return myDiamondIds;
+}
+
     // Miners can also make a polishing request
 
     enum PolishingRequestStatus {
@@ -161,6 +188,9 @@ contract DiamondContract {
     uint[] public polishingRequestIds;
     uint public nextPolishingRequestId = 1;
 
+    // roughDiamondId => whether it already has a pending polishing request
+    mapping(uint => bool) public hasPendingPolishingRequest;
+
     event PolishingRequested(
         uint indexed requestId,
         uint indexed roughDiamondId,
@@ -181,8 +211,8 @@ contract DiamondContract {
             "Diamond must be certified first"
         );
         require(
-            d.certification.isCertified,
-            "Diamond is not Kimberley certified"
+            !hasPendingPolishingRequest[_roughDiamondId],
+            "Polishing request already exists for this diamond"
         );
 
         uint requestId = nextPolishingRequestId;
@@ -195,6 +225,8 @@ contract DiamondContract {
             status: PolishingRequestStatus.Pending,
             requestNote: _requestNote
         });
+
+        hasPendingPolishingRequest[_roughDiamondId] = true;
 
         polishingRequestIds.push(requestId);
         nextPolishingRequestId++;
@@ -418,7 +450,7 @@ contract DiamondContract {
             require(polishedId != 0, "Polished diamond ID cannot be zero");
             require(
                 diamonds[polishedId].id == 0,
-                "Polished diamond already exists"
+                "Diamond ID already exists"
             );
 
             require(
@@ -464,6 +496,7 @@ contract DiamondContract {
         request.status = PolishingRequestStatus.Processed;
         request.polisher = msg.sender;
 
+        hasPendingPolishingRequest[request.roughDiamondId] = false;
         emit PolishedDiamondsCreated(
             _requestId,
             roughDiamond.id,

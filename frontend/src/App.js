@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
+
+// Main Page and Stakeholder Pages
 import StartupPage from "./pages/StartupPage";
-import MintPage from "./pages/MintPage";
-import DiamondMainPage from "./pages/DiamondMainPage";
+import MinerPage from "./pages/MinerPage";
+import KimberleyCertifierPage from "./pages/KimberleyCertifierPage";
 import PolishingPage from "./pages/PolishingPage";
-import config from "./config";
-import StakeholderABI from "./abi/StakeholderContract.json"
+
+// Contract Addresses and ABI
+
+import ContractAddresses from "./ContractData/ContractAddresses.js";
+import StakeholderABI from "./ContractData/StakeholderContract.json"
 import "./App.css";
 
 const ROLE_NAMES = {
@@ -30,7 +35,7 @@ export default function App() {
 
             //Check role and route to correct page
             const provider = new ethers.BrowserProvider(window.ethereum);
-            const contract = new ethers.Contract(config.stakeholderAddress, StakeholderABI, provider);
+            const contract = new ethers.Contract(ContractAddresses.stakeholderAddress, StakeholderABI, provider);
             const userRole = await contract.getRole(address);
             const roleNum = Number(userRole);
             setRole(roleNum);
@@ -79,7 +84,7 @@ export default function App() {
         if (role === 1) {
             // miner can only access miner page
             switch (page) {
-                case "miner": return <MintPage onNext={() => setPage ("startup")} onBack={() => setPage("startup")} />;
+                case "miner": return <MinerPage onNext={() => setPage ("startup")} onBack={() => setPage("startup")} />;
                 default: return unauthorised();
             }
         }
@@ -87,7 +92,7 @@ export default function App() {
         if (role === 2) {
             switch (page) {
                 // Kimberley Certifier can only access diamond page
-                case "certifier": return <DiamondMainPage onNext={() => setPage("startup")} onBack={() => setPage("startup")} />;
+                case "certifier": return <KimberleyCertifierPage onNext={() => setPage("startup")} onBack={() => setPage("startup")} />;
                 default: return unauthorised();
             }
         }

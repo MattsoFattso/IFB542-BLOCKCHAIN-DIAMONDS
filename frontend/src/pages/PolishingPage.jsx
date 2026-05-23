@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import config from "../config";
-import DiamondABI from "../abi/DiamondContract.json";
+import config from "../ContractData/ContractAddresses.js";
+import DiamondABI from "../ContractData/DiamondContract.json";
 
 export default function PolishingPage({ onBack }) {
     const [pendingRequests, setPendingRequests] = useState([]);
@@ -17,12 +17,13 @@ export default function PolishingPage({ onBack }) {
             colour: "",
             clarity: "",
             cut: "",
-            caratWeight: ""
+            caratHundreths: ""
         }
     ]);
 
     useEffect(() => {
         loadPendingRequests();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function getSignerContract() {
@@ -86,7 +87,7 @@ export default function PolishingPage({ onBack }) {
                     colour: "",
                     clarity: "",
                     cut: "",
-                    caratWeight: ""
+                    caratHundreths: ""
                 }
             ]);
             return;
@@ -101,7 +102,7 @@ export default function PolishingPage({ onBack }) {
                 colour: "",
                 clarity: "",
                 cut: "",
-                caratWeight: ""
+                caratHundreths: ""
             };
         });
 
@@ -153,7 +154,7 @@ export default function PolishingPage({ onBack }) {
                 return;
             }
 
-            if (!d.caratWeight || Number(d.caratWeight) <= 0) {
+            if (!d.caratHundreths || Number(d.caratHundreths) <= 0) {
                 alert(`Please enter valid carat weight for diamond ${i + 1}.`);
                 return;
             }
@@ -189,9 +190,10 @@ export default function PolishingPage({ onBack }) {
                 d.cut
             );
 
-            // Solidity expects uint256[]
-            const caratWeights = polishedDiamonds.map((d) =>
-                Number(d.caratWeight)
+            // Convert decimal carats into hundredths before sending to Solidity
+            // Example: 1.25 becomes 125
+            const caratWeights  = polishedDiamonds.map((d) =>
+                Math.round(Number(d.caratHundreths) * 100)
             );
 
             const tx = await contract.mintPolishedDiamond(
@@ -219,7 +221,7 @@ export default function PolishingPage({ onBack }) {
                     colour: "",
                     clarity: "",
                     cut: "",
-                    caratWeight: ""
+                    caratHundreths: ""
                 }
             ]);
 
@@ -416,19 +418,20 @@ function getErrorReason(error) {
                     <div>
                         <label>Carat Weight</label>
                         <br />
-                        <input
-                            type="number"
-                            min="1"
-                            placeholder="e.g. 1"
-                            value={diamond.caratWeight}
-                            onChange={(e) =>
-                                updatePolishedDiamond(
-                                    index,
-                                    "caratWeight",
-                                    e.target.value
-                                )
-                            }
-                        />
+                       <input
+                           type="number"
+                           min="0.01"
+                           step="0.01"
+                           placeholder="e.g. 1.25"
+                           value={diamond.caratHundreths}
+                           onChange={(e) =>
+                               updatePolishedDiamond(
+                                   index,
+                                   "caratHundreths",
+                                   e.target.value
+                               )
+                           }
+                       />
                     </div>
                 </div>
             ))}
