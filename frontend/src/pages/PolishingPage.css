@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap');
+
+.grader-wrapper {
+    min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.grader-hero {
+    min-height: 100vh;
+    background-image: url('../img/graderdbd-page.png');
+    background-size: cover;
+    background-position: center top;
+    padding: 220px 40px 40px 40px;
+    position: relative;
+}
+
+.grader-back-btn {
+    position: fixed;
+    top: 200px;
+    right: 40px;
+    width: 100px;
+    cursor: pointer;
+    z-index: 999;
+    transition: opacity 0.2s;
+}
+
+.grader-back-btn:hover {
+    opacity: 0.8;
+}
+
+.grader-status {
+    font-size:13px;
+    color: #6b6b6b;
+    margin-bottom: 16px
+}
+
+/* Three column layout */
+.grader-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.07fr 1fr;
+    gap: 30px;
+    align-items: start;
+    margin-top: 150px;
+    margin-left: 20px;
+}
+
+.grader-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.grader-field {
+    width: 400px;
+    display: flex;
+    flex-direction: 5px;
+    gap: 5px;
+}
+
+.grader-field label {
+    font-size: 18px;
+    font-weight: 500;
+    color: #6b6b6b;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.grader-field input, .grader-field select {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    background: rgba(255,255,255,0.85);
+    width: 100%;
+}
+
+.grader-refresh-btn {
+    width: 90px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.3s;
+    margin-left: 310px;
+}
+
+.grader-refresh-btn:hover {
+    opacity: 0.7;
+}
+
+.grader-request-info {
+    font-size: 12px;
+    color: #6b6b6b;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+{/* Scrollable cards */}
+.grader-cards-scroll {
+    max-height: 400px;
+    overflow-y:auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-right: 90px;
+}
+
+.grader-diamond-card {
+    background: rgba(255,255,255,0.6);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.grader-diamond-card h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+/* Mint button */
+.grader-mint-btn-row {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 24px;
+}
+
+.grader-mint-btn {
+    width: 160px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.grader-mint-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}

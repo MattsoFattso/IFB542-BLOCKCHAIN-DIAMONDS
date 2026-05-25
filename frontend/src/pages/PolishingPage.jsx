@@ -3,6 +3,11 @@ import { ethers } from "ethers";
 import config from "../ContractData/ContractAddresses.js";
 import DiamondABI from "../ContractData/DiamondContract.json";
 
+import "./PolishingPage.css";
+import returnImg from "../img/return.png";
+import refreshImg from "../img/refresh.png";
+import mintImg from "../img/mintPolishedDiamonds.png";
+
 export default function PolishingPage({ onBack }) {
     const [pendingRequests, setPendingRequests] = useState([]);
     const [selectedRequestId, setSelectedRequestId] = useState("");
@@ -261,193 +266,80 @@ function getErrorReason(error) {
 }
 
     return (
-        <div className="page">
-            <h1>Grader / Polisher Dashboard</h1>
+        <div className="grader-wrapper">
+            <div className="grader-hero">
 
-            {status && <p>{status}</p>}
+                {/* Back button */}
+                <img src={returnImg} alt="Back" className="grader-back-btn" onClick={onBack}/>
+               {status && <p className="grader-status">{status}</p>}
 
-            <h2>Pending Polishing Requests</h2>
+               <div className="grader-grid">
+                   {/* Left - Pending Requests */}
+                   <div className="grader-section">
+                       <div className="grader-field">
+                           <label>Polishing Requests:</label>
+                           <select value={selectedRequestId} onChange={(e) => handleSelectRequest(e.target.value)}>
+                               <option value="">-- Select a Request --</option>
+                               {pendingRequests.length === 0 && <option disabled>No pending requests</option>}
+                               {pendingRequests.map((request) => (
+                                   <option key={request.requestId} value={request.requestId}>Request #{request.requestId} - Diamond #{request.roughDiamondId}</option>
+                               ))}
+                           </select>
+                       </div>
+                       <img src={refreshImg} alt="Refresh" className="grader-refresh-btn" onClick={loadPendingRequests}/>
 
-            <button onClick={loadPendingRequests}>Refresh Requests</button>
+                       {selectedRequest && (
+                        <div className="grader-request-info">
+                            <p><strong>Request ID:</strong> {selectedRequest.requestId}</p>
+                            <p><strong>Rough Diamond:</strong> {selectedRequest.roughDiamondId}</p>
+                            <p><strong>Note:</strong> {selectedRequest.requestId}</p>
+                        </div>
+                       )}
+                   </div>
 
-            <div>
-                <label>Polishing Request</label>
-                <br />
-                <select
-                    value={selectedRequestId}
-                    onChange={(e) => handleSelectRequest(e.target.value)}
-                >
-                    <option value="">-- Select a Request --</option>
+                   {/* Middle - Diamond Count */}
+                   <div className="grader-section">
+                       <div className="grader-field">
+                           <label>Number of Polished Diamonds:</label>
+                           <input type="number" min="1" value={diamondCount} onChange={(e) => handleDiamondCountChange(e.target.value)}/>
+                       </div>
+                   </div>
 
-                    {pendingRequests.length === 0 && (
-                        <option disabled>No pending polishing requests</option>
-                    )}
+                   {/* Right - Scrollable diamond input cards */}
+                   <div className="grader-cards-scroll">
+                       {polishedDiamonds.map((diamond, index) => (
+                           <div key={index} className="grader-diamond-card">
+                               <h3>Polished Diamond {index + 1}</h3>
+                               <div className="grader-field">
+                                   <label>Grading Report Hash</label>
+                                   <input type="number" placeholder="e.g. 900001" value={diamond.polishedDiamondId} onChange={(e) => updatePolishedDiamond(index, "polishedDiamondId", e.target.value)}/>
+                               </div>
+                               <div className="grader-field">
+                                   <label>Colour</label>
+                                   <input type="text" placeholder="e.g. D" value={diamond.colour} onChange={(e) => updatePolishedDiamond(index, "colour", e.target.value)}/>
+                               </div>
+                               <div className="grader-field">
+                                   <label>Clarity</label>
+                                   <input type="text" placeholder="e.g. VS1" value={diamond.clarity} onChange={(e) => updatePolishedDiamond(index, "clarity", e.target.value)}/>
+                               </div>
+                               <div className="grader-field">
+                                   <label>Cut</label>
+                                   <input type="text" placeholder="e.g. Round Brilliant" value={diamond.cut} onChange={(e) => updatePolishedDiamond(index, "cut", e.target.value)}/>
+                               </div>
+                               <div className="grader-field">
+                                   <label>Carat Weight</label>
+                                   <input type="number" min="0.01" step="0.01" placeholder="e.g. 1.25" value={diamond.caratHundreths} onChange={(e) => updatePolishedDiamond(index, "caratHundreths", e.target.value)}/>
+                               </div>
+                           </div>
+                       ))}
+                   </div>
+               </div>
 
-                    {pendingRequests.map((request) => (
-                        <option
-                            key={request.requestId}
-                            value={request.requestId}
-                        >
-                            Request #{request.requestId} - Rough Diamond #{request.roughDiamondId}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            {selectedRequest && (
-                <div>
-                    <h3>Selected Request</h3>
-                    <p><strong>Request ID:</strong> {selectedRequest.requestId}</p>
-                    <p><strong>Rough Diamond ID:</strong> {selectedRequest.roughDiamondId}</p>
-                    <p><strong>Requester:</strong> {selectedRequest.requester}</p>
-                    <p><strong>Request Note:</strong> {selectedRequest.requestNote}</p>
-                </div>
-            )}
-
-            <hr />
-
-            <h2>Mint Polished Diamonds</h2>
-
-            <div>
-                <label>Number of Polished Diamonds</label>
-                <br />
-                <input
-                    type="number"
-                    min="1"
-                    value={diamondCount}
-                    onChange={(e) => handleDiamondCountChange(e.target.value)}
-                />
-            </div>
-
-            {polishedDiamonds.map((diamond, index) => (
-                <div
-                    key={index}
-                    style={{
-                        border: "1px solid #ccc",
-                        padding: "12px",
-                        marginTop: "12px"
-                    }}
-                >
-                    <h3>Polished Diamond {index + 1}</h3>
-
-                    <div>
-                        <label>Polished Diamond ID</label>
-                        <br />
-                        <input
-                            type="number"
-                            placeholder="e.g. 900001"
-                            value={diamond.polishedDiamondId}
-                            onChange={(e) =>
-                                updatePolishedDiamond(
-                                    index,
-                                    "polishedDiamondId",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </div>
-
-                    <div>
-                        <label>Grading Report Hash</label>
-                        <br />
-                        <input
-                            type="text"
-                            placeholder="e.g. ipfs://QmGradingReport001"
-                            value={diamond.gradingReportHash}
-                            onChange={(e) =>
-                                updatePolishedDiamond(
-                                    index,
-                                    "gradingReportHash",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </div>
-
-                    <div>
-                        <label>Colour</label>
-                        <br />
-                        <input
-                            type="text"
-                            placeholder="e.g. D"
-                            value={diamond.colour}
-                            onChange={(e) =>
-                                updatePolishedDiamond(
-                                    index,
-                                    "colour",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </div>
-
-                    <div>
-                        <label>Clarity</label>
-                        <br />
-                        <input
-                            type="text"
-                            placeholder="e.g. VS1"
-                            value={diamond.clarity}
-                            onChange={(e) =>
-                                updatePolishedDiamond(
-                                    index,
-                                    "clarity",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </div>
-
-                    <div>
-                        <label>Cut</label>
-                        <br />
-                        <input
-                            type="text"
-                            placeholder="e.g. Round Brilliant"
-                            value={diamond.cut}
-                            onChange={(e) =>
-                                updatePolishedDiamond(
-                                    index,
-                                    "cut",
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </div>
-
-                    <div>
-                        <label>Carat Weight</label>
-                        <br />
-                       <input
-                           type="number"
-                           min="0.01"
-                           step="0.01"
-                           placeholder="e.g. 1.25"
-                           value={diamond.caratHundreths}
-                           onChange={(e) =>
-                               updatePolishedDiamond(
-                                   index,
-                                   "caratHundreths",
-                                   e.target.value
-                               )
-                           }
-                       />
-                    </div>
-                </div>
-            ))}
-
-            <br />
-
-            <button
-                onClick={handleMintPolishedDiamonds}
-                disabled={!selectedRequestId}
-            >
-                Mint Polished Diamonds
-            </button>
-
-            <hr />
-
-            <button onClick={onBack}>Back</button>
-        </div>
+               {/* Mint button bottom right */}
+               <div className="grader-mint-btn-row">
+                   <img src={mintImg} alt="Mint Polished Diamonds" className="grader-mint-btn" onClick={handleMintPolishedDiamonds} style={{ marginLeft: "1380px"}}/>
+               </div>
+           </div>
+       </div>
     );
 }
