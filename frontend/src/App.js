@@ -13,15 +13,9 @@ import ContractAddresses from "./ContractData/ContractAddresses.js";
 import StakeholderABI from "./ContractData/StakeholderContract.json"
 import "./App.css";
 
-const ROLE_NAMES = {
-    1: "Miner",
-    2: "Kimberley Certifier",
-    3: "Grader/Polisher",
-};
-
 export default function App() {
     const [page, setPage] = useState("startup");
-    const [account, setAccount] = useState("");
+    const [, setAccount] = useState("");
     const [role, setRole] = useState(null);
 
     // auto-connect metamask
@@ -106,19 +100,6 @@ export default function App() {
         }
     return (
         <div className = "app">
-            <header className="app-header">
-                <span>gemvault</span>
-                <div>
-                    {account ? (
-                        <span>
-                            {account.slice(0,6)}...{account.slice(-4)}
-                            {role !== null && <span> - {ROLE_NAMES[role] ?? "Unknown"}</span>}
-                        </span>
-                    ) : (
-                        <span> Connecting...</span>
-                    )}
-                </div>
-            </header>
             <main className="app-main">
                 {renderPage()}
             </main>
