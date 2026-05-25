@@ -2,6 +2,13 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import config from "../ContractData/ContractAddresses.js"
 import DiamondABI from "../ContractData/DiamondContract.json";
+import "./MinerPage.css";
+
+import returnImg from "../img/return.png";
+import mineDiamondImg from "../img/mine-diamond.png";
+import requestImg from "../img/request.png";
+import refreshImg from "../img/refresh.png";
+
 
 const DIAMOND_STATES = {
     0: "Rough",
@@ -107,146 +114,106 @@ export default function MinerPage({ onNext, onBack}) {
     }
 
     return (
-        <div className="page">
-            <h1>Miner Dashboard</h1>
+        <div className="miner-wrapper">
+            <div className="miner-hero">
 
-            {status && <p>{status}</p>}
+                {status && <p className="miner-status">{status}</p>}
 
-            {/* Diamonds Table */}
-            <h2>Owned Diamonds - Rough and Polished</h2>
-            <button onClick={loadMyDiamonds}>Refresh</button>
+                {/* top section */}
+                <div className="miner-top-grid">
 
-            {myDiamonds.length === 0 ? (
-                <p>No diamonds found.</p>
-            ) : (
-                <table className="diamond-table">
-                    <thead>
-                        <tr>
-                            <th>Type</th>
-                            <th>ID</th>
-                            <th>Parent ID</th>
-                            <th>Origin</th>
-                            <th>Document / Report Hash</th>
-                            <th>State</th>
-                            <th>Grading Details</th>
-                        </tr>
-                    </thead>
+                    {/* Mine a diamond */}
+                    <div className="miner-section">
+                        <div className="miner-field">
+                            <label>Country of origin:</label>
+                            <input type="text" placeholder="e.g China" value={country} onChange={e => setCountry(e.target.value)}/>
+                        </div>
+                        <div className="miner-field">
+                            <label>Rough Diamond Hash:</label>
+                            <input type="text" placeholder="e.g. RD-1234-5678" value={diamondHash} onChange={e => setDiamondHash(e.target.value)}/>
+                        </div>
+                        <img src={mineDiamondImg} alt="Mine Diamond" className="miner-action-btn" onClick={handleMint}/>
+                    </div>
 
-                    <tbody>
-                        {myDiamonds.map(d => (
-                            <tr key={d.id}>
-                                <td>
-                                    {d.stateNum === 4 ? "Polished Diamond" : "Rough Diamond"}
-                                </td>
+                    {/* Request Polishing */}
+                    <div className="miner-section">
+                        <div className="miner-field">
+                            <label>Certified Diamonds: </label>
+                            <select value={selectedId} onChange={e => setSelectedId(e.target.value)}>
+                                <option value="">--Select a diamond--</option>
+                                {certifiedDiamonds.length === 0 && <option disabled>No certified Diamonds</option>}
+                                {certifiedDiamonds.map(id => (<option key={id} value={id}>Diamond #{id}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="miner-field">
+                            <label>Request Note:</label>
+                            <input type="text" placeholder="e.g. Please cut into 3 pieces" value={requestNote} onChange={e => setRequestNote(e.target.value)}/>
+                        </div>
+                        <img src ={requestImg} alt="Request" className="miner-action-btn" onClick={handleRequestPolish}/>
+                    </div>
+                </div>
 
-                                <td>#{d.id}</td>
+                    {/* Table */}
+                    <div className="miner-table-section">
+                        <div className="miner-table-header">
+                            <img src={refreshImg} alt="Refresh" className="miner-refresh-btn" onClick={loadMyDiamonds}/>
+                        </div>
 
-                                <td>
-                                    {d.parentId === "0" ? "-" : `#${d.parentId}`}
-                                </td>
+                        {myDiamonds.length === 0 ? (
+                            <p>No diamonds found.</p>
+                        ) : (
+                            <table className="diamond-table">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>ID</th>
+                                        <th>Parent ID</th>
+                                        <th>Origin</th>
+                                        <th>Document / Report Hash</th>
+                                        <th>State</th>
+                                        <th>Grading Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {myDiamonds.map(d => (
+                                        <tr key={d.id}>
+                                            <td>
+                                                {d.stateNum === 4 ? "Polished Diamond" : "Rough Diamond"}
+                                            </td>
+                                            <td>#{d.id}</td>
+                                            <td>
+                                                {d.parentId === "0" ? "-" : `#${d.parentId}`}
+                                            </td>
+                                            <td>{d.origin}</td>
+                                            <td className="hash-cell">
+                                                {d.stateNum === 4
+                                                    ? d.gradingReportHash
+                                                    : d.roughDocumentHash}
+                                            </td>
+                                            <td>{d.state}</td>
+                                            <td>
+                                                {d.stateNum === 4 ? (
+                                                    <>
+                                                        <div><strong>Colour:</strong> {d.colour}</div>
+                                                        <div><strong>Clarity:</strong> {d.clarity}</div>
+                                                        <div><strong>Cut:</strong> {d.cut}</div>
+                                                        <div><strong>Carat:</strong> {d.caratHundreths}</div>
+                                                    </>
+                                                ) : (
+                                                    "-"
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
+                    </div>
 
-                                <td>{d.origin}</td>
-
-                                <td className="hash-cell">
-                                    {d.stateNum === 4
-                                        ? d.gradingReportHash
-                                        : d.roughDocumentHash}
-                                </td>
-
-                                <td>{d.state}</td>
-
-                                <td>
-                                    {d.stateNum === 4 ? (
-                                        <>
-                                            <div><strong>Colour:</strong> {d.colour}</div>
-                                            <div><strong>Clarity:</strong> {d.clarity}</div>
-                                            <div><strong>Cut:</strong> {d.cut}</div>
-                                            <div><strong>Carat:</strong> {d.caratHundreths}</div>
-                                        </>
-                                    ) : (
-                                        "-"
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
-
-            <hr />
-
-            {/* Mining a Rough Diamond */}
-            <h2>Mine a Rough Diamond</h2>
-
-            <div>
-                <label>Country of Origin</label>
-                <br />
-                <input
-                    type="text"
-                    placeholder="e.g. China"
-                    value={country}
-                    onChange={e => setCountry(e.target.value)}
-                />
-            </div>
-
-            <div>
-                <label>Rough Diamond Hash</label>
-                <br />
-                <input
-                    type="text"
-                    placeholder="e.g. RD-2024-00041"
-                    value={diamondHash}
-                    onChange={e => setDiamondHash(e.target.value)}
-                />
-            </div>
-
-            <button onClick={handleMint}>Mine Diamond</button>
-
-            <hr />
-
-            {/* Request Polishing */}
-            <h2>Request Polishing</h2>
-            <p>Select a certified diamond to polish.</p>
-
-            <div>
-                <label>Certified Diamonds</label>
-                <br />
-                <select
-                    value={selectedId}
-                    onChange={e => setSelectedId(e.target.value)}
-                >
-                    <option value="">-- Select a Diamond --</option>
-
-                    {certifiedDiamonds.length === 0 && (
-                        <option disabled>No certified diamonds</option>
-                    )}
-
-                    {certifiedDiamonds.map(id => (
-                        <option key={id} value={id}>
-                            Diamond #{id}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div>
-                <label>Request Note</label>
-                <br />
-                <input
-                    type="text"
-                    placeholder="e.g. Please cut into 3 pieces"
-                    value={requestNote}
-                    onChange={e => setRequestNote(e.target.value)}
-                />
-            </div>
-
-            <button onClick={handleRequestPolish} disabled={!selectedId}>
-                Request Polishing
-            </button>
-
-            <hr />
-
-            <button onClick={onBack}>Back</button>
+                    {/* Back */}
+                    <img src={returnImg} alt ="Back" className="miner-back-btn" onClick={onBack}/>
+                </div>
         </div>
     );
 }

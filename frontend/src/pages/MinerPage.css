@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap');
+
+.miner-wrapper {
+    min-height: 100vh;
+    font-family: sans-serif;
+}
+
+.miner-hero {
+    min-height: 100vh;
+    background-image: url('../img/minerdbd-page.png');
+    background-size: cover;
+    background-position: center top;
+    padding: 380px, 40px, 40px, 40px;
+    position: relative;
+}
+
+/* status */
+.miner-status {
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 16px;
+    background: rgba(255,255,255,0.7);
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+/* two-column layout */
+.miner-top-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px;
+    margin-bottom: 20px;
+    margin-left: 55px;
+    padding-top: 380px;
+}
+
+.miner-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.miner-table-section {
+    padding: 20px;
+    margin-left: 44px;
+    margin-top: 90px;
+    width: 232%;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* form field */
+.miner-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.miner-field label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+    font-family: 'DM Sans', sans-serif;
+    color: #6b6b6b;
+}
+
+.miner-field input, .miner-field select {
+    padding: 5px 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    background: rgba(255,255,255,0.85);
+    width: 80%;
+}
+
+/* Action btns */
+.miner-action-btn {
+    width: 120px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    align-self: flex-end;
+    margin-right: 160px;
+}
+
+.miner-action-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}
+
+/* table */
+.miner-table-header {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 12px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+/* refresh btn */
+.miner-refresh-btn {
+    width: 100px;
+    opacity: 100;
+
+}
+
+.miner-refresh-btn:hover {
+    opacity:0.7;
+    transform: translateY(-2px);
+}
+
+/* table */
+.diamond-table {
+    width: 40%;
+    border-collapse: collapse;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: #6b6b6b;
+}
+
+.diamond-table th {
+    background: rgba(0,0,0,0.08);
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #6b6b6b;
+}
+
+.diamond-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    color: #6b6b6b;
+}
+
+.hash-cell {
+    font-family: monospace;
+    font-size: 11px;
+    max-width: 180px;
+    word-break: break-all;
+}
+
+/*back btn*/
+.miner-back-btn {
+    position: fixed;
+    top: 200px;
+    right: 40px;
+    width: 140px;
+    cursor: pointer;
+    z-index: 999;
+    transition: opacity 0.2s;
+}
+
+.miner-back-btn:hover {
+    opacity: 0.8;
+    transform: translateY(-2px);
+}
