@@ -96,14 +96,11 @@ export default function MinerPage({ onNext, onBack}) {
         if (!selectedId) { alert("Please select a diamond first."); return; }
         if (!requestNote) { alert ("Please enter a request note."); return; }
         try {
-            setStatus("Waiting for MetaMask...");
             const provider = new ethers.BrowserProvider(window.ethereum);
             const signer = await provider.getSigner();
             const contract = new ethers.Contract (config.diamondAddress, DiamondABI, signer);
             const tx = await contract.requestPolishing(selectedId, requestNote);
-            setStatus("Submitting polish request...");
             await tx.wait();
-            setStatus("Polish request submitted for Diamond #" + selectedId + "!");
             setSelectedId("");
         } catch (e) {
             setStatus("Error: " + e.message);
