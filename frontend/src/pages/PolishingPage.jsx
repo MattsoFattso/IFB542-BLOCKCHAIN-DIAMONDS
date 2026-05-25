@@ -292,7 +292,7 @@ function getErrorReason(error) {
                         <div className="grader-request-info">
                             <p><strong>Request ID:</strong> {selectedRequest.requestId}</p>
                             <p><strong>Rough Diamond:</strong> {selectedRequest.roughDiamondId}</p>
-                            <p><strong>Note:</strong> {selectedRequest.requestId}</p>
+                            <p><strong>Note:</strong> {selectedRequest.requestNote}</p>
                         </div>
                        )}
                    </div>
