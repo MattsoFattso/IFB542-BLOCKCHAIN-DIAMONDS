@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap');
+
+.certifier-wrapper {
+    min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.certifier-hero {
+    min-height: 100vh;
+    background-image: url('../img/certifierdbd-page.png');
+    background-size: cover;
+    background-position: 290px 40px 40px 40px;
+    position: relative;
+}
+
+.certifier-back-btn {
+    position:fixed;
+    top: 200px;
+    right: 40px;
+    width: 130px;
+    cursor: pointer;
+    z-index: 999;
+    transition:opacity 0.2s
+}
+certifier-back-btn:hover { opacity: 0.8}
+
+.certifier-status {
+    font-size: 13px;
+    color: #6b6b6b;
+    margin-bottom:16px;
+    font-family: 'DM Sans', sans-serif;
+}
+.certifier-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 400px;
+    margin-left: 50px;
+    padding-top: 360px;
+}
+
+.certifier-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.certifier-field label {
+    font-size: 18px;
+    font-weight: 500;
+    color: #6b6b6b;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.certifier-field-input, .certifier-field select {
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 13px;
+    background: rgba(255,255,255,0.85);
+    width: 100%;
+}
+
+.certifier-btn {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    margin-left: 180px;
+}
+
+.certifier-action-btn {
+    width: 100px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.certifier-action-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}

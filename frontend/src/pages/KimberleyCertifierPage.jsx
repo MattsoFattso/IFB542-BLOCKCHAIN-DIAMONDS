@@ -3,6 +3,12 @@ import { ethers } from "ethers";
 import config from "../ContractData/ContractAddresses.js";
 import DiamondABI from "../ContractData/DiamondContract.json";
 
+import "./KimberleyCertifierPage.css";
+import returnImg from "../img/return.png";
+import approveImg from "../img/approve.png";
+import rejectImg from "../img/reject.png";
+
+
 export default function DiamondMainPage({ onNext, onBack }) {
     const [diamonds, setDiamonds] = useState([]);
     const [selectedId, setSelectedId] = useState("");
@@ -132,64 +138,34 @@ export default function DiamondMainPage({ onNext, onBack }) {
     }
 
     return (
-        <div className="page">
-            <h1>Diamond - Kimberley Certification</h1>
-            <p>Select a rough diamond to approve or reject.</p>
+        <div className="certifier-wrapper">
+            <div className="certifier-hero">
+                <img src={returnImg} alt="Back" className="certifier-back-btn" onClick={onBack}/>
+                {status && <p className="certifier-status">{status}</p>}
 
-            {status && <p>{status}</p>}
+                <div className="certifier-form">
+                    <div className="certifier-field">
+                        <label>Diamonds requesting certification:</label>
+                        <select value={selectedId} onChange={e => setSelectedId(e.target.value)}>
+                            <option value="">--Select a diamond--</option>
+                            {diamonds.length === 0 && <option disabled>No diamonds pending</option>}
+                            {diamonds.map(id => (
+                                <option key={id} value={id}>Diamond #{id}</option>
+                            ))}
+                        </select>
+                    </div>
 
-            <div>
-                <label>Diamonds requesting certification</label>
-                <br />
+                    <div className="certifier-field">
+                        <label>Rejection reason:</label>
+                        <input type="text" placeholder="e.g. Origin documents could not be verified." value={rejectReason} onChange={e => setRejectReason(e.target.value)}/>
+                    </div>
 
-                <select
-                    value={selectedId}
-                    onChange={e => setSelectedId(e.target.value)}
-                >
-                    <option value="">-- Select a diamond --</option>
-
-                    {diamonds.length === 0 && (
-                        <option disabled>No diamonds pending.</option>
-                    )}
-
-                    {diamonds.map(id => (
-                        <option key={id} value={id}>
-                            Diamond #{id}
-                        </option>
-                    ))}
-                </select>
+                    <div className="certifier-btn">
+                        <img src={approveImg} alt="Approve" className="certifier-action-btn" onClick={handleApprove}/>
+                         <img src={rejectImg} alt="Reject" className="certifier-action-btn" onClick={handleReject}/>
+                    </div>
+                </div>
             </div>
-
-            <br />
-
-            <div>
-                <label>Rejection Reason</label>
-                <br />
-                <input
-                    type="text"
-                    placeholder="e.g. Origin documents could not be verified"
-                    value={rejectReason}
-                    onChange={e => setRejectReason(e.target.value)}
-                />
-            </div>
-
-            <br />
-
-            <button onClick={handleApprove} disabled={!selectedId}>
-                Approve Certificate
-            </button>
-
-            <button
-                onClick={handleReject}
-                disabled={!selectedId}
-                style={{ marginLeft: "8px" }}
-            >
-                Reject Certificate
-            </button>
-
-            <button onClick={onBack} style={{ marginLeft: "8px" }}>
-                Back
-            </button>
         </div>
     );
 }
