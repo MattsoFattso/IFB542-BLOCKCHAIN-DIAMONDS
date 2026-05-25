@@ -81,12 +81,9 @@ export default function MinerPage({ onNext, onBack}) {
         if (!country) { alert("Please enter a country"); return; }
         if (!diamondHash) { alert("Please enter a diamond here"); return; }
         try {
-            setStatus("Waiting for MetaMask...");
             const contract = await getSignerContract();
             const tx = await contract.mintRoughDiamond(country, diamondHash);
-            setStatus("Minting on blockchain...");
             await tx.wait();
-            setStatus("Diamond minted successfully!");
             setCountry("");
             setDiamondHash("");
             loadMyDiamonds();
@@ -155,11 +152,12 @@ export default function MinerPage({ onNext, onBack}) {
                 </div>
 
                     {/* Table */}
-                    <div className="miner-table-section">
                         <div className="miner-table-header">
                             <img src={refreshImg} alt="Refresh" className="miner-refresh-btn" onClick={loadMyDiamonds}/>
                         </div>
 
+
+                    <div className="miner-table-section">
                         {myDiamonds.length === 0 ? (
                             <p>No diamonds found.</p>
                         ) : (

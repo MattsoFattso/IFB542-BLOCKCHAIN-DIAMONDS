@@ -40,12 +40,13 @@
     gap: 14px;
 }
 
+/* rough and polished diamonds table */
 .miner-table-section {
     padding: 20px;
     margin-left: 44px;
-    margin-top: 90px;
-    width: 232%;
-    max-height: 300px;
+    margin-top: -10px;
+    width: 94%;
+    max-height: 190px;
     overflow-y: auto;
 }
 
@@ -87,13 +88,13 @@
     transform: translateY(-2px);
 }
 
-/* table */
+/* refresh table button */
 .miner-table-header {
     display: flex;
     justify-content: flex-start;
     margin-bottom: 12px;
-    margin-top: 10px;
-    margin-left: 10px;
+    margin-top: 120px;
+    margin-left: 1540px;
 }
 
 /* refresh btn */
