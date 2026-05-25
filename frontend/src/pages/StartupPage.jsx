@@ -12,8 +12,9 @@ export default function StartupPage({ role, onSelectRole}) {
     return (
         <div className ="startup-wrapper">
 
-                    {/* Full background image */}
-                    <div className="startup-hero">
+
+                {/* Full background image */}
+                <div className="startup-hero">
 
                     {/* Welcome text */}
                     <h1 className="welcome-text">Welcome back,</h1>
