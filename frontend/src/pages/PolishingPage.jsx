@@ -39,8 +39,6 @@ export default function PolishingPage({ onBack }) {
 
     async function loadPendingRequests() {
         try {
-            setStatus("Loading pending polishing requests...");
-
             const contract = await getSignerContract();
 
             // Solidity: getPendingPolishingRequests() returns uint[] memory
