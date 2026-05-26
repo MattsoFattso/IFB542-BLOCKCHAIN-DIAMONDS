@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import config from "../ContractData/ContractAddresses.js"
 import DiamondABI from "../ContractData/DiamondContract.json";
-import "./MinerPage.css";
+import "../css-pages/MinerPage.css";
 
 import returnImg from "../img/return.png";
 import mineDiamondImg from "../img/mine-diamond.png";

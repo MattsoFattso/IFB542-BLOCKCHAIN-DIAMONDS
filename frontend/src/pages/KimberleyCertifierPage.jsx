@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import config from "../ContractData/ContractAddresses.js";
 import DiamondABI from "../ContractData/DiamondContract.json";
 
-import "./KimberleyCertifierPage.css";
+import "../css-pages/KimberleyCertifierPage.css";
 import returnImg from "../img/return.png";
 import approveImg from "../img/approve.png";
 import rejectImg from "../img/reject.png";

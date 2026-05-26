@@ -1,4 +1,4 @@
-import "./StartupPage.css";
+import "../css-pages/StartupPage.css";
 import minerImg from "../img/miner-button.png";
 import certifyImg from "../img/certify-button.png";
 import gradeImg from "../img/grade.polish-button.png";

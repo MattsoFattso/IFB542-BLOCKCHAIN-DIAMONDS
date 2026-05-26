@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import config from "../ContractData/ContractAddresses.js";
 import DiamondABI from "../ContractData/DiamondContract.json";
 
-import "./PolishingPage.css";
+import "../css-pages/PolishingPage.css";
 import returnImg from "../img/return.png";
 import refreshImg from "../img/refresh.png";
 import mintImg from "../img/mintPolishedDiamonds.png";
