@@ -26,12 +26,12 @@ export default function DiamondMainPage({ onNext, onBack }) {
         return new ethers.Contract(config.diamondAddress, DiamondABI, signer);
     }
 
-    async function getProviderContract() {
+    async function getProviderContract() { // no gas used, read-only
         const provider = new ethers.BrowserProvider(window.ethereum);
         return new ethers.Contract(config.diamondAddress, DiamondABI, provider);
     }
 
-    async function loadDiamonds() {
+    async function loadDiamonds() { // fetching uncertified diamonds
         try {
             setStatus("Loading pending diamonds...");
 
@@ -45,25 +45,20 @@ export default function DiamondMainPage({ onNext, onBack }) {
         }
     }
 
-    async function handleApprove() {
+    async function handleApprove() { // handling errors
         if (!selectedId) {
             alert("Please select a diamond first.");
             return;
         }
 
         try {
-            setStatus("Waiting for MetaMask...");
-
             const contract = await getSignerContract();
 
             const certHash = "KP-CERT-" + selectedId + "-" + Date.now();
 
             const tx = await contract.certifyRoughDiamond(selectedId, certHash);
 
-            setStatus("Confirming certification...");
             await tx.wait();
-
-            setStatus("Diamond #" + selectedId + " certified!");
 
             setSelectedId("");
             setRejectReason("");
@@ -86,8 +81,6 @@ export default function DiamondMainPage({ onNext, onBack }) {
         }
 
         try {
-            setStatus("Waiting for MetaMask...");
-
             const contract = await getSignerContract();
 
             const tx = await contract.rejectRoughDiamond(
@@ -95,10 +88,8 @@ export default function DiamondMainPage({ onNext, onBack }) {
                 rejectReason
             );
 
-            setStatus("Confirming rejection...");
             await tx.wait();
 
-            setStatus("Diamond #" + selectedId + " rejected.");
 
             setSelectedId("");
             setRejectReason("");
