@@ -309,10 +309,13 @@ function getErrorReason(error) {
                    <div className="grader-cards-scroll">
                        {polishedDiamonds.map((diamond, index) => (
                            <div key={index} className="grader-diamond-card">
-                               <h3>Polished Diamond {index + 1}</h3>
+                               <div className="grader-field">
+                                   <label>Polished Diamond ID</label>
+                                  <input type="number" placeholder="e.g. 900001" value={diamond.polishedDiamondId} onChange={(e) => updatePolishedDiamond(index, "polishedDiamondId", e.target.value)}/>
+                              </div>
                                <div className="grader-field">
                                    <label>Grading Report Hash</label>
-                                   <input type="number" placeholder="e.g. 900001" value={diamond.polishedDiamondId} onChange={(e) => updatePolishedDiamond(index, "polishedDiamondId", e.target.value)}/>
+                                   <input type="text" placeholder="e.g. AE43R4F" value={diamond.gradingReportHash} onChange={(e) => updatePolishedDiamond(index, "gradingReportHash", e.target.value)}/>
                                </div>
                                <div className="grader-field">
                                    <label>Colour</label>
