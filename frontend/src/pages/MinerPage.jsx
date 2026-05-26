@@ -18,6 +18,7 @@ const DIAMOND_STATES = {
     4: "Polished"
 };
 
+// initialising state variables as the program first starts for storage
 export default function MinerPage({ onNext, onBack}) {
     const [country, setCountry] = useState("");
     const [diamondHash, setDiamondHash] = useState("");
@@ -33,10 +34,11 @@ export default function MinerPage({ onNext, onBack}) {
         loadMyDiamonds();
     }, []);
 
+    // connects to metamask
     async function getSignerContract() {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
-        return new ethers.Contract(config.diamondAddress, DiamondABI, signer)
+        return new ethers.Contract(config.diamondAddress, DiamondABI, signer) //creates a contract instance using contract address, ABI, and signer
     }
 
     async function loadMyDiamonds() {
@@ -77,7 +79,7 @@ export default function MinerPage({ onNext, onBack}) {
         }
     }
 
-    async function handleMint() {
+    async function handleMint() { // handles each mint request through metamask
         if (!country) { alert("Please enter a country"); return; }
         if (!diamondHash) { alert("Please enter a diamond here"); return; }
         try {
@@ -92,7 +94,7 @@ export default function MinerPage({ onNext, onBack}) {
         }
     }
 
-    async function handleRequestPolish() {
+    async function handleRequestPolish() { // making sure user inputs a variable
         if (!selectedId) { alert("Please select a diamond first."); return; }
         if (!requestNote) { alert ("Please enter a request note."); return; }
         try {

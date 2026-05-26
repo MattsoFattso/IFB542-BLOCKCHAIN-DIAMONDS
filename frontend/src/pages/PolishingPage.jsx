@@ -15,6 +15,7 @@ export default function PolishingPage({ onBack }) {
     const [diamondCount, setDiamondCount] = useState(1);
     const [status, setStatus] = useState("");
 
+    // information about the polished diamond
     const [polishedDiamonds, setPolishedDiamonds] = useState([
         {
             polishedDiamondId: "",
@@ -31,6 +32,7 @@ export default function PolishingPage({ onBack }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // creates a write connection to the contract
     async function getSignerContract() {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
