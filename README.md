@@ -10,6 +10,11 @@ This application is only intended to be used by registered stakeholders. Each Me
 ## Architecture Overview
 
 The GemVault project is organised into separate folders for the blockchain smart contracts, documentation, and the React frontend application.
+## Public Repository
+
+The public GitHub repository for this project is available at:
+
+https://github.com/MattsoFattso/IFB542-BLOCKCHAIN-DIAMONDS
 
 ```text
 NEWGEMVAULT [IFB542-BLOCKCHAIN-DIAMONDS]
