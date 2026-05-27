@@ -83,7 +83,7 @@ contract DiamondContract {
         string colour;
         string clarity;
         string cut;
-        uint256 carat;
+        uint256 caratHundreths;
     }
 
     mapping(uint => Diamond) public diamonds;
@@ -132,7 +132,7 @@ contract DiamondContract {
                 colour: "",
                 clarity: "",
                 cut: "",
-                carat: 0
+                caratHundreths: 0
             })
         });
 
@@ -408,7 +408,7 @@ contract DiamondContract {
         string[] memory _colours,
         string[] memory _clarities,
         string[] memory _cuts,
-        uint256[] memory _caratWeights
+        uint256[] memory _caratHundreths
     ) external onlyGraderPolisher {
         PolishingRequest storage request = polishingRequests[_requestId];
 
@@ -440,7 +440,7 @@ contract DiamondContract {
                 _polishedDiamondIds.length == _colours.length &&
                 _polishedDiamondIds.length == _clarities.length &&
                 _polishedDiamondIds.length == _cuts.length &&
-                _polishedDiamondIds.length == _caratWeights.length,
+                _polishedDiamondIds.length == _caratHundreths.length,
             "Input array lengths must match"
         );
 
@@ -461,7 +461,7 @@ contract DiamondContract {
             require(bytes(_clarities[i]).length > 0, "Clarity required");
             require(bytes(_cuts[i]).length > 0, "Cut required");
             require(
-                _caratWeights[i] > 0,
+                _caratHundreths[i] > 0,
                 "Carat weight must be greater than zero"
             );
 
@@ -484,7 +484,7 @@ contract DiamondContract {
                     colour: _colours[i],
                     clarity: _clarities[i],
                     cut: _cuts[i],
-                    carat: _caratWeights[i]
+                    caratHundreths: _caratHundreths[i]
                 })
             });
 
