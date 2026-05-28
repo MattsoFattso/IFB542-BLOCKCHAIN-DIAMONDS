@@ -204,11 +204,11 @@
 	},
 	"sources": {
 		"StakeholderManagement.sol": {
-			"keccak256": "0x6f30a61305cc6859483d800e40c88a9893af53ab42e41d6826e79f362a1cde90",
+			"keccak256": "0xce6e3d35a004bcfeb80c403db31321f7da91505bb590b3e57a355efc5682f6dc",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://99ea0deb1129fd6162979f9d9226be9d61e596da1f4153dc485300aa58885d6e",
-				"dweb:/ipfs/QmXqtPwzdQQJodX2WUVgTF5mYRq2dzZAqt3vgoBUCM6GSy"
+				"bzz-raw://9025c0264ee2bcc1b6545bded3e6792fa565080ab822d8a47f30d4d4030bcdce",
+				"dweb:/ipfs/QmRUuKHGQgiMbfoUySgbD7LkdzrKWZ7Y5QCkARZmevGtdM"
 			]
 		}
 	},

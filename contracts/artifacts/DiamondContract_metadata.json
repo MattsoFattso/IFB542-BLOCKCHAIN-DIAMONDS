@@ -221,6 +221,11 @@
 						"type": "string"
 					},
 					{
+						"internalType": "string",
+						"name": "RoughDocumentHash",
+						"type": "string"
+					},
+					{
 						"internalType": "enum DiamondContract.DiamondState",
 						"name": "state",
 						"type": "uint8"
@@ -281,13 +286,26 @@
 							},
 							{
 								"internalType": "uint256",
-								"name": "carat",
+								"name": "caratHundreths",
 								"type": "uint256"
 							}
 						],
 						"internalType": "struct DiamondContract.GradingData",
 						"name": "grading",
 						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getMyDiamonds",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
 					}
 				],
 				"stateMutability": "view",
@@ -314,6 +332,25 @@
 						"internalType": "uint256[]",
 						"name": "",
 						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "hasPendingPolishingRequest",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -353,7 +390,7 @@
 					},
 					{
 						"internalType": "uint256[]",
-						"name": "_caratWeights",
+						"name": "_caratHundreths",
 						"type": "uint256[]"
 					}
 				],
@@ -365,19 +402,32 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "_id",
-						"type": "uint256"
+						"internalType": "string",
+						"name": "_origin",
+						"type": "string"
 					},
 					{
 						"internalType": "string",
-						"name": "_origin",
+						"name": "_documenthash",
 						"type": "string"
 					}
 				],
 				"name": "mintRoughDiamond",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "nextDiamondId",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -507,13 +557,99 @@
 			}
 		],
 		"devdoc": {
+			"details": "This contract represents the transactions involves with the diamond lifecycle. It links polished diamonds to their original rough diamond and manages the certification and approval of diamonds before they enter the market This contract ensures: - Only certified rough diamonds can be used - Full traceability is maintained",
 			"kind": "dev",
-			"methods": {},
+			"methods": {
+				"certifyRoughDiamond(uint256,string)": {
+					"details": "Only a registered Kimberley Certifier can call this function.      The diamond must exist, must currently be in the Rough state, and must not already be certified.      The certificate hash is validated for a basic length range before being stored on-chain.",
+					"params": {
+						"_certificateHash": "The certificate hash or off-chain document reference proving Kimberley approval.",
+						"_diamondId": "The ID of the rough diamond being certified."
+					}
+				},
+				"getMyDiamonds()": {
+					"details": "This function loops through the full diamondIds array twice:      once to count owned diamonds and once to populate the return array.      This is acceptable as a view function but may become inefficient if the diamond list grows large.",
+					"returns": {
+						"_0": "myDiamondIds An array containing the IDs of diamonds owned by the caller."
+					}
+				},
+				"getPendingPolishingRequests()": {
+					"details": "Only registered Grader/Polisher accounts can call this function.      The function loops through all polishing request IDs twice:      first to count pending requests, then to populate a correctly-sized return array.      It is mainly used by the Polisher/Grader frontend page to display available requests.",
+					"returns": {
+						"_0": "pendingIds An array of polishing request IDs that are still pending."
+					}
+				},
+				"getUncertifiedRoughDiamonds()": {
+					"details": "This view function loops through all diamond IDs twice:      first to count uncertified rough diamonds, then to populate a correctly-sized return array.      It is intended to support the Kimberley Certifier frontend page.",
+					"returns": {
+						"_0": "uncertifiedIds An array of rough diamond IDs that are still awaiting certification."
+					}
+				},
+				"mintPolishedDiamond(uint256,uint256[],string[],string[],string[],string[],uint256[])": {
+					"details": "Only a registered Grader/Polisher can call this function.      The polishing request must exist and still be pending.      The linked rough diamond must exist, be certified, and have valid Kimberley certification data.      Each polished diamond receives a new ID, inherits the rough diamond's origin and certification data,      and stores its own grading information.      After processing, the rough diamond is marked as Processed, the request is marked as Processed,      and the pending request flag is cleared.",
+					"params": {
+						"_caratHundreths": "The carat weights for each polished diamond, stored in hundredths.",
+						"_clarities": "The clarity grades for each polished diamond.",
+						"_colours": "The colour grades for each polished diamond.",
+						"_cuts": "The cut descriptions or cut grades for each polished diamond.",
+						"_gradingReportHashes": "The grading report hashes or off-chain grading references for each polished diamond.",
+						"_polishedDiamondIds": "The new IDs to assign to the polished diamonds.",
+						"_requestId": "The ID of the polishing request being processed."
+					}
+				},
+				"mintRoughDiamond(string,string)": {
+					"details": "Only registered miners can call this function. The diamond is created in the Rough state      and starts uncertified and ungraded. A RoughDiamondMinted event is emitted for frontend tracking.",
+					"params": {
+						"_documenthash": "A document hash or off-chain reference proving the diamond's rough origin data.",
+						"_origin": "The origin or mining location of the rough diamond."
+					}
+				},
+				"rejectRoughDiamond(uint256,string)": {
+					"details": "Only a registered Kimberley Certifier can call this function.      The diamond must exist, must still be in the Rough state, and must not already be certified.      Rejected diamonds have their lifecycle state updated to Rejected.",
+					"params": {
+						"_diamondId": "The ID of the rough diamond being rejected.",
+						"_reason": "The reason for rejecting the rough diamond."
+					}
+				},
+				"requestPolishing(uint256,string)": {
+					"details": "Only the miner who owns the rough diamond can request polishing.      The diamond must exist, be owned by the caller, and already be certified.      A rough diamond can only have one pending polishing request at a time.      When successful, the request is stored on-chain and a PolishingRequested event is emitted.",
+					"params": {
+						"_requestNote": "Optional note or instruction attached to the polishing request.",
+						"_roughDiamondId": "The ID of the certified rough diamond being submitted for polishing."
+					}
+				}
+			},
+			"title": "PolishedDiamond",
 			"version": 1
 		},
 		"userdoc": {
 			"kind": "user",
-			"methods": {},
+			"methods": {
+				"certifyRoughDiamond(uint256,string)": {
+					"notice": "Certifies a rough diamond and updates its lifecycle state to Certified."
+				},
+				"getMyDiamonds()": {
+					"notice": "Returns all diamond IDs owned by the calling miner."
+				},
+				"getPendingPolishingRequests()": {
+					"notice": "Returns all polishing requests that are currently pending."
+				},
+				"getUncertifiedRoughDiamonds()": {
+					"notice": "Returns all rough diamonds that have not yet been certified."
+				},
+				"mintPolishedDiamond(uint256,uint256[],string[],string[],string[],string[],uint256[])": {
+					"notice": "Processes a certified rough diamond into one or more polished diamonds."
+				},
+				"mintRoughDiamond(string,string)": {
+					"notice": "Mints a new rough diamond and assigns ownership to the calling miner."
+				},
+				"rejectRoughDiamond(uint256,string)": {
+					"notice": "Rejects a rough diamond if it fails Kimberley certification checks."
+				},
+				"requestPolishing(uint256,string)": {
+					"notice": "Creates a polishing request for a certified rough diamond."
+				}
+			},
 			"version": 1
 		}
 	},
@@ -534,19 +670,19 @@
 	},
 	"sources": {
 		"Diamond.sol": {
-			"keccak256": "0xb2cb24a52684cb939e04248c7588a76495690d24f6ce943255a902ce9b8ba5ba",
+			"keccak256": "0xa4743bddce90756332109c7d175b55d22889721db90e2c683328b82a9ad908ad",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b4d08b553ac4efbf2c06c57435cf2a8328e9b41f0fa2f4b71f2a8fc9aba2fadf",
-				"dweb:/ipfs/QmPT1HzcG4RpterAF95zZG93wGA1S42ZanNDhVDzvnhe1b"
+				"bzz-raw://9b4d5353a3d9250917403b4e2a940f2af2335b2678d48c1d6fbe52c2a7704375",
+				"dweb:/ipfs/QmaVNHvDdf9muqw6WeZdATA2QTNzQdvtjkEJVkPjEnBbnS"
 			]
 		},
 		"StakeholderManagement.sol": {
-			"keccak256": "0x6f30a61305cc6859483d800e40c88a9893af53ab42e41d6826e79f362a1cde90",
+			"keccak256": "0xce6e3d35a004bcfeb80c403db31321f7da91505bb590b3e57a355efc5682f6dc",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://99ea0deb1129fd6162979f9d9226be9d61e596da1f4153dc485300aa58885d6e",
-				"dweb:/ipfs/QmXqtPwzdQQJodX2WUVgTF5mYRq2dzZAqt3vgoBUCM6GSy"
+				"bzz-raw://9025c0264ee2bcc1b6545bded3e6792fa565080ab822d8a47f30d4d4030bcdce",
+				"dweb:/ipfs/QmRUuKHGQgiMbfoUySgbD7LkdzrKWZ7Y5QCkARZmevGtdM"
 			]
 		}
 	},

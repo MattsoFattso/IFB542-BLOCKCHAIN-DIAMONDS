@@ -10,8 +10,6 @@ pragma solidity ^0.8.18;
  * This contract acts as the central authority for validating permissions
  * across other smart contracts in the system.
  */
-
-
 contract StakeholderContract {
 
     enum Role {
@@ -26,6 +24,8 @@ contract StakeholderContract {
         bool isRegistered;
     }
 
+    // Maps each stakeholder to a role and address
+
     mapping(address => Stakeholder) public stakeholders;
 
     address public admin;
@@ -38,6 +38,8 @@ contract StakeholderContract {
         require(msg.sender == admin, "Not admin");
         _;
     }
+
+    // Basic functions to check stakeholder rights and privileges
 
     function registerStakeholder(address _addr, Role _role) public onlyAdmin {
         stakeholders[_addr] = Stakeholder(_role, true);

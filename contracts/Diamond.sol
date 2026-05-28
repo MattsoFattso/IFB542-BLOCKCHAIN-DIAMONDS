@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
+
+
+import "./StakeholderManagement.sol";
+
 /**
  * @title PolishedDiamond
  * @dev This contract represents the transactions involves with the diamond lifecycle.
@@ -12,14 +16,14 @@ pragma solidity ^0.8.18;
  * - Full traceability is maintained
  */
 
-import "./StakeholderManagement.sol";
-
 contract DiamondContract {
     StakeholderContract public stakeholderContract;
 
     constructor(address _stakeholderContractAddress) {
         stakeholderContract = StakeholderContract(_stakeholderContractAddress);
     }
+
+    // This calls modifier functions form the stakeholder management contract
 
     modifier onlyMiner() {
         require(
@@ -44,6 +48,9 @@ contract DiamondContract {
         );
         _;
     }
+
+    // This creates a pre-defined enum structure of each diamond state to change and read it during supply chain
+
     enum DiamondState {
         Rough,
         Certified,
@@ -70,11 +77,15 @@ contract DiamondContract {
         GradingData grading;
     }
 
+    // This is the struct for the certification stakeholder to change the diamond
+
     struct CertificationData {
         bool isCertified;
         address certifier;
         string certificateHash;
     }
+
+    // This is the struct for the grading stakeholder to alter and add to a diamond
 
     struct GradingData {
         bool isGraded;
@@ -85,6 +96,8 @@ contract DiamondContract {
         string cut;
         uint256 caratHundreths;
     }
+
+    // Main diamond mapping state for the blockchain
 
     mapping(uint => Diamond) public diamonds;
     uint[] public diamondIds;
@@ -101,6 +114,11 @@ contract DiamondContract {
 
     uint public nextDiamondId = 1; // State variable tracking new rough diamond (ID's don't matter for rough but do matter for polished)
 
+    /// @notice Mints a new rough diamond and assigns ownership to the calling miner.
+    /// @dev Only registered miners can call this function. The diamond is created in the Rough state
+    ///      and starts uncertified and ungraded. A RoughDiamondMinted event is emitted for frontend tracking.
+    /// @param _origin The origin or mining location of the rough diamond.
+    /// @param _documenthash A document hash or off-chain reference proving the diamond's rough origin data.
 
     function mintRoughDiamond(
         string memory _origin,
@@ -141,6 +159,12 @@ contract DiamondContract {
         emit RoughDiamondMinted(newDiamondId, msg.sender, _origin); // Emit event for UI
     }
 
+    /// @notice Returns all diamond IDs owned by the calling miner.
+    /// @dev This function loops through the full diamondIds array twice:
+    ///      once to count owned diamonds and once to populate the return array.
+    ///      This is acceptable as a view function but may become inefficient if the diamond list grows large.
+    /// @return myDiamondIds An array containing the IDs of diamonds owned by the caller.
+
     function getMyDiamonds() external view onlyMiner returns (uint[] memory) {
     uint count = 0;
 
@@ -167,13 +191,15 @@ contract DiamondContract {
     return myDiamondIds;
 }
 
-    // Miners can also make a polishing request
+    // Miners can also make a polishing request, this declares an enum of the status
 
     enum PolishingRequestStatus {
         Pending, // Rough Diamond waiting to be minted into polished
         Rejected, // Rough diamond that was denied polishing
         Processed // Request that has been processed but still stored on chain
     }
+
+    // Polishing request struct to be read by the polishing stakeholder
 
     struct PolishingRequest {
         uint requestId;
@@ -183,6 +209,8 @@ contract DiamondContract {
         PolishingRequestStatus status;
         string requestNote;
     }
+
+    // Mapping of all the polishing requests
 
     mapping(uint => PolishingRequest) public polishingRequests;
     uint[] public polishingRequestIds;
@@ -197,6 +225,14 @@ contract DiamondContract {
         address indexed requester,
         string requestNote
     );
+
+    /// @notice Creates a polishing request for a certified rough diamond.
+    /// @dev Only the miner who owns the rough diamond can request polishing.
+    ///      The diamond must exist, be owned by the caller, and already be certified.
+    ///      A rough diamond can only have one pending polishing request at a time.
+    ///      When successful, the request is stored on-chain and a PolishingRequested event is emitted.
+    /// @param _roughDiamondId The ID of the certified rough diamond being submitted for polishing.
+    /// @param _requestNote Optional note or instruction attached to the polishing request.
 
     function requestPolishing(
         uint _roughDiamondId,
@@ -242,6 +278,12 @@ contract DiamondContract {
 
     // First a view function to get all uncertified rough diamonds for the certifier
 
+    /// @notice Returns all rough diamonds that have not yet been certified.
+    /// @dev This view function loops through all diamond IDs twice:
+    ///      first to count uncertified rough diamonds, then to populate a correctly-sized return array.
+    ///      It is intended to support the Kimberley Certifier frontend page.
+    /// @return uncertifiedIds An array of rough diamond IDs that are still awaiting certification.
+
     function getUncertifiedRoughDiamonds()
         external
         view
@@ -281,11 +323,19 @@ contract DiamondContract {
         return uncertifiedIds;
     }
 
+   
     event RoughDiamondCertified(
         uint indexed diamondId,
         address indexed KimberleyAuthority,
         string CertificateHash
     );
+
+    /// @notice Certifies a rough diamond and updates its lifecycle state to Certified.
+    /// @dev Only a registered Kimberley Certifier can call this function.
+    ///      The diamond must exist, must currently be in the Rough state, and must not already be certified.
+    ///      The certificate hash is validated for a basic length range before being stored on-chain.
+    /// @param _diamondId The ID of the rough diamond being certified.
+    /// @param _certificateHash The certificate hash or off-chain document reference proving Kimberley approval.
 
     function certifyRoughDiamond(
         uint _diamondId,
@@ -328,6 +378,13 @@ contract DiamondContract {
         string rejectionReason
     );
 
+    /// @notice Rejects a rough diamond if it fails Kimberley certification checks.
+    /// @dev Only a registered Kimberley Certifier can call this function.
+    ///      The diamond must exist, must still be in the Rough state, and must not already be certified.
+    ///      Rejected diamonds have their lifecycle state updated to Rejected.
+    /// @param _diamondId The ID of the rough diamond being rejected.
+    /// @param _reason The reason for rejecting the rough diamond.
+
     function rejectRoughDiamond(
         uint _diamondId,
         string memory _reason
@@ -353,6 +410,13 @@ contract DiamondContract {
     // Polisher/Grader Authority Logic
 
     // View Polish Requests
+
+    /// @notice Returns all polishing requests that are currently pending.
+    /// @dev Only registered Grader/Polisher accounts can call this function.
+    ///      The function loops through all polishing request IDs twice:
+    ///      first to count pending requests, then to populate a correctly-sized return array.
+    ///      It is mainly used by the Polisher/Grader frontend page to display available requests.
+    /// @return pendingIds An array of polishing request IDs that are still pending.
 
     function getPendingPolishingRequests()
         external
@@ -401,6 +465,22 @@ contract DiamondContract {
         uint[] polishedDiamondIds
     );
 
+    /// @notice Processes a certified rough diamond into one or more polished diamonds.
+    /// @dev Only a registered Grader/Polisher can call this function.
+    ///      The polishing request must exist and still be pending.
+    ///      The linked rough diamond must exist, be certified, and have valid Kimberley certification data.
+    ///      Each polished diamond receives a new ID, inherits the rough diamond's origin and certification data,
+    ///      and stores its own grading information.
+    ///      After processing, the rough diamond is marked as Processed, the request is marked as Processed,
+    ///      and the pending request flag is cleared.
+    /// @param _requestId The ID of the polishing request being processed.
+    /// @param _polishedDiamondIds The new IDs to assign to the polished diamonds.
+    /// @param _gradingReportHashes The grading report hashes or off-chain grading references for each polished diamond.
+    /// @param _colours The colour grades for each polished diamond.
+    /// @param _clarities The clarity grades for each polished diamond.
+    /// @param _cuts The cut descriptions or cut grades for each polished diamond.
+    /// @param _caratHundreths The carat weights for each polished diamond, stored in hundredths.
+
     function mintPolishedDiamond(
         uint _requestId,
         uint[] memory _polishedDiamondIds,
@@ -411,6 +491,8 @@ contract DiamondContract {
         uint256[] memory _caratHundreths
     ) external onlyGraderPolisher {
         PolishingRequest storage request = polishingRequests[_requestId];
+
+        // Check all the inputted variables for any input errors (improve in extensions)
 
         require(request.requestId != 0, "Polishing request does not exist");
         require(
@@ -443,6 +525,8 @@ contract DiamondContract {
                 _polishedDiamondIds.length == _caratHundreths.length,
             "Input array lengths must match"
         );
+
+        // Iterate through each diamonds to mint them individually on the chain (one transaction, multiple state changes)
 
         for (uint i = 0; i < _polishedDiamondIds.length; i++) {
             uint polishedId = _polishedDiamondIds[i];
@@ -488,6 +572,8 @@ contract DiamondContract {
                 })
             });
 
+            // Push each new diamonds to the chain
+
             diamondIds.push(polishedId);
         }
 
@@ -495,6 +581,8 @@ contract DiamondContract {
 
         request.status = PolishingRequestStatus.Processed;
         request.polisher = msg.sender;
+
+        // Change polishing request status and rough diamond state so the miner can know the rough diamond doesn't exist anymore
 
         hasPendingPolishingRequest[request.roughDiamondId] = false;
         emit PolishedDiamondsCreated(
@@ -504,6 +592,4 @@ contract DiamondContract {
             _polishedDiamondIds
         );
     }
-
-    //
 }
