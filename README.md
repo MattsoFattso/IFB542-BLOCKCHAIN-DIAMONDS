@@ -7,6 +7,61 @@ GemVault is a blockchain-based dApp for managing diamond certification, ownershi
 
 This application is only intended to be used by registered stakeholders. Each MetaMask wallet address must be registered with a stakeholder role before it can use the related functionality in the dApp.
 
+## Architecture Overview
+
+The GemVault project is organised into separate folders for the blockchain smart contracts, documentation, and the React frontend application.
+## Public Repository
+
+The public GitHub repository for this project is available at:
+
+https://github.com/MattsoFattso/IFB542-BLOCKCHAIN-DIAMONDS
+
+```text
+NEWGEMVAULT [IFB542-BLOCKCHAIN-DIAMONDS]
+│
+├── contracts/
+│   └── Contains the Solidity smart contracts used by the GemVault dApp.
+│
+├── docs/
+│   └── Contains project documentation, design notes, diagrams, and supporting files.
+│
+├── frontend/
+│   └── Contains the React frontend application used to interact with the deployed smart contracts.
+│
+│   ├── public/
+│   │   └── Contains static public assets used by the React application.
+│   │
+│   ├── src/
+│   │   ├── ContractData/
+│   │   │   └── Stores smart contract ABIs and deployed contract address configuration files.
+│   │   │
+│   │   ├── css-pages/
+│   │   │   └── Contains page-specific CSS styling files for the frontend interface.
+│   │   │
+│   │   ├── img/
+│   │   │   └── Contains image assets used throughout the application.
+│   │   │
+│   │   ├── pages/
+│   │   │   └── Contains the main React page components for each dApp screen.
+│   │   │
+│   │   ├── App.js
+│   │   │   └── Main React component that controls the overall frontend application flow.
+│   │   │
+│   │   ├── index.js
+│   │   │   └── Entry point for rendering the React application.
+│   │   │
+│   │   ├── App.css
+│   │   │   └── Global styling for the main application.
+│   │   │
+│   │   └── index.css
+│   │       └── Base styling for the React application.
+│   │
+│   ├── package.json
+│   │   └── Defines frontend dependencies and npm scripts.
+│   │
+│   ├── package-lock.json
+│   │   └── Locks installed dependency versions.
+
 
 1. Required Software
 ====================

@@ -315,7 +315,7 @@ function getErrorReason(error) {
                               </div>
                                <div className="grader-field">
                                    <label>Grading Report Hash</label>
-                                   <input type="text" placeholder="e.g. AE43R4F" value={diamond.gradingReportHash} onChange={(e) => updatePolishedDiamond(index, "gradingReportHash", e.target.value)}/>
+                                   <input type="text" placeholder="e.g. def1234h61" value={diamond.gradingReportHash} onChange={(e) => updatePolishedDiamond(index, "gradingReportHash", e.target.value)}/>
                                </div>
                                <div className="grader-field">
                                    <label>Colour</label>
